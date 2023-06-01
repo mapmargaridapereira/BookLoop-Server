@@ -23,6 +23,8 @@ const userSchema = new Schema(
     offeredBooks: [{type: Schema.Types.ObjectId, ref: "Book"}],
     wishedBooks: [{type: Schema.Types.ObjectId, ref: "Book"}],
     messages: [{type: Schema.Types.ObjectId, ref: "Message"}],
+    reviews: [{type: Schema.Types.ObjectId, ref: "Review"}],
+
   },
   {
     timestamps: true,

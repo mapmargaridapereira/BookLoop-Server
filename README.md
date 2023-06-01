@@ -127,7 +127,8 @@ User model
   imageUrl: {type: String},
   offeredBooks: [ { type: Schema.Types.ObjectId, ref:'Book' } ],
   wishedBooks: [ { type: Schema.Types.ObjectId, ref:'Book' } ],
-  messages: [{type: Schema.Types.ObjectId, ref:'Message'}]
+  messages: [{type: Schema.Types.ObjectId, ref:'Message'}],
+  reviews: [{type: Schema.Types.ObjectId, ref:'Review'}]
 }
 
 Book model

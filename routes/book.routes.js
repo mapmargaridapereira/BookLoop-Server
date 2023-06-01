@@ -8,6 +8,8 @@ const mongoose = require('mongoose');
 // Require Data Models
 const Book = require("../models/Book.model");
 
+const { isAuthenticated } = require("../middleware/jwt.middleware");
+
 // GET /offers ROUTE that Lists the Books Up for offer
 //WORKING
 router.get('/offers', async(req,res)=>{
@@ -22,7 +24,7 @@ router.get('/offers', async(req,res)=>{
 
 // POST /offers ROUTE that Creates a new Book up for offer
 //WORKING? Not rendering title etc?
-router.post('/offers', async (req,res)=>{
+router.post('/offers', isAuthenticated, async (req,res)=>{
     const {title, author, genre, description, publisher, published_date} = req.body;
 
     try{
@@ -51,7 +53,6 @@ router.get('/offers/:bookId', async (req,res)=>{
 
     try{
         let foundBook = await Book.findById(bookId)
-/*         .populate('tasks'); */
         res.status(200).json(foundBook);
     }
     catch(error){
@@ -61,7 +62,7 @@ router.get('/offers/:bookId', async (req,res)=>{
 
 // PUT /offers/:bookId to update info of a Book
 //WORKING
-router.put('/offers/:bookId', async (req, res)=>{
+router.put('/offers/:bookId', isAuthenticated, async (req, res)=>{
     const {bookId} = req.params;
     const {title, author, genre, description, publisher, published_date} = req.body;
 
@@ -81,7 +82,7 @@ router.put('/offers/:bookId', async (req, res)=>{
 });
 
 //WORKING
-router.delete('/offers/:bookId', async(req,res)=>{
+router.delete('/offers/:bookId', isAuthenticated, async(req,res)=>{
     const {bookId} = req.params;
 
     if(!mongoose.Types.ObjectId.isValid(bookId)){

@@ -3,106 +3,78 @@ const router = express.Router();
 
 const User = require("../models/User.model");
 const Book = require("../models/Book.model");
+const Message = require("../models/Message.model");
+const Review = require("../models/Review.model");
 
-const fileUploader = require("../config/cloudinary.config");
+/* const fileUploader = require("../config/cloudinary.config");
+ */
+//Require middleware to check if user is logged in in order to access specific routes.
+const { isAuthenticated } = require("../middleware/jwt.middleware");
 
-// Require necessary (isLoggedOut and isLiggedIn) middleware in order to control access to specific routes
-const isLoggedOut = require("../middleware/isLoggedOut");
-const isLoggedIn = require("../middleware/isLoggedIn");
-/* 
 //GET Route to render user profile
-router.get('/user-profile', isLoggedIn, async (req, res)=>{
-try {
-    const user = req.session.currentUser._id
-    let userInSession = await User.findById(user).populate('favPhoto')
-    res.render('user/user-profile.hbs', {userInSession});
-} catch (error) {
-   console.log(error) 
-}
-  });
-
-// Render a form to edit a User
-router.get('/edit-user-profile/',isLoggedIn, (req,res)=>{
-    const userId = req.params.id;
-
-    async function getUserInfo(){
-        try{
-        let userInfo = await User.findById(userId);
-        res.render('user/edit-user-profile.hbs', {userInSession: req.session.currentUser})
-        } 
-        catch(error){
-            console.log(error);
-        }
-    }
-
-    getUserInfo();
-});
-
-//Add photo to favorites
-router.post('/gallery/addFavs/:id', isLoggedIn, async (req, res, next) => {
-    
+router.get('/profile/:id', isAuthenticated, async (req, res)=>{
     const { id } = req.params;
-    const currentUser = req.session.currentUser._id;
 
     try {
-        const favouritePhoto = await User.findByIdAndUpdate(currentUser, { $push: { favPhoto: id }});
-
-        res.redirect(`/user-profile`);
-
-    } catch (error) {
-        console.log(error);
-        next(error);
-    }
-});
-
-
-router.post('/gallery/removeFavs/:id', isLoggedIn, async (req, res, next) => {
+        const userProfile = await User.findById(id)
+          .populate({
+            path: "offeredBooks",
+            populate: { path: "books", model: 'Book'},
+          })
+          .populate({
+            path: "wishedBooks",
+            populate: { path: "books", model: "Book" },
+          })
+          .populate({
+            path: "messages",
+            populate: { path: "messages", model: "Message" },
+          })
+          .populate({
+            path: "reviews",
+            populate: { path: "reviews", model: "Review" },
+          });
     
-    const { id } = req.params;
-    const currentUser = req.session.currentUser._id;
-
-    try {
-        const favouritePhoto = await User.findByIdAndUpdate(currentUser, { $pull: { favPhoto: id }});
-        
-        res.redirect(`/user-profile`);
-
-    } catch (error) {
-        console.log(error);
+        res.status(200).json(userProfile);
+      } catch (error) {
         next(error);
-    }
-});
-
-// Submit the edited user
-
-router.post('/edit-user-profile/:id',isLoggedIn,fileUploader.single("imageUrl"), (req,res)=>{
-    const userId = req.params.id; 
-
-    const {username, about} = req.body;
-
-    async function editUserInfo(){
-        try{
-            let editedUser = await User.findByIdAndUpdate(userId, {username, about, imageUrl: req.file.path});
-            res.redirect('/user-profile');
-        }
-        catch(error){
-            console.log(error);
-        }
-    }
-
-    editUserInfo();
-});
-
-// GET route to retrieve and display all the users
-router.get('/community', isLoggedIn, (req,res)=>{
-    async function findAllUsersFromDb(){
-      try{
-          let allUsersFromDb = await User.find();
-          res.render('pages/community.hbs', {community: allUsersFromDb});
       }
-      catch(error){
-          console.log(error);
-      }
-    }
-    findAllUsersFromDb();
+    });
+
+//PUT Route to update user profile information
+    router.put("/profile/:id", isAuthenticated, async (req, res, next) => {
+        const { id } = req.params;
+        const { name, about, profileImg } = req.body;
+      
+        try {
+          const updateProfile = await User.findByIdAndUpdate(
+            id,
+            {
+              name,
+              about,
+              profileImg,
+            },
+            { new: true }
+          );
+      
+          res.status(200).json(updateProfile);
+        } catch (error) {
+          next(error);
+        }
+      });
+      
+//DELETE Route to remove user profile
+router.delete("/profile/:id", isAuthenticated, async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    await User.findByIdAndRemove(id);
+
+    res
+      .status(200)
+      .json({ message: `The user with the id ${id} was deleted successfully` });
+  } catch (error) {
+    next(error);
+  }
 });
-module.exports = router; */
+
+module.exports = router;
