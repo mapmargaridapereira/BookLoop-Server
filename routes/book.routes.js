@@ -24,7 +24,7 @@ router.get('/offers', async(req,res)=>{
 
 // POST /offers ROUTE that Creates a new Book up for offer
 //WORKING? Not rendering title etc?
-router.post('/offers', isAuthenticated, async (req,res)=>{
+router.post('/offers', async (req,res)=>{
     const {title, author, genre, description, publisher, published_date} = req.body;
 
     try{
