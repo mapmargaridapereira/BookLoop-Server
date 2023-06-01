@@ -6,12 +6,13 @@ const router = require('express').Router();
 const mongoose = require('mongoose');
 
 // Require Data Models
-/////MISSING
+const Book = require("../models/Book.model");
 
-// GET /api/projects ROUTE that Lists the Books Up for offer
+// GET /offers ROUTE that Lists the Books Up for offer
+//WORKING
 router.get('/offers', async(req,res)=>{
     try{
-        let allBooks = await Book.find().populate('tasks');
+        let allBooks = await Book.find();
         res.json(allBooks);
     }
     catch(error){
@@ -19,15 +20,13 @@ router.get('/offers', async(req,res)=>{
     }
 });
 
-// POST /api/offers ROUTE that Creates a new Book up for offer
-
+// POST /offers ROUTE that Creates a new Book up for offer
+//WORKING? Not rendering title etc?
 router.post('/offers', async (req,res)=>{
-    const {title, description} = req.body;
+    const {title, author, genre, description, publisher, published_date} = req.body;
 
     try{
-        // We wait until we have the status of the creation of Project to make the next step
-        let response = await Project.create({title, description, tasks: []});
-        // Send the response as a json file, because we're making an API
+        let response = await Book.create({title, author, genre, description, publisher, published_date});
         res.json(response);
     }
     catch(error){
@@ -37,11 +36,12 @@ router.post('/offers', async (req,res)=>{
 
 });
 
-// GET /api/projects/:projectId to display specific info of a Project
-router.get('/projects/:projectId', async (req,res)=>{
-    const {projectId} = req.params;
+// GET /offers/:bookId to display specific info of a Book
+//WORKING - again not rendering title etc just the object ID
+router.get('/offers/:bookId', async (req,res)=>{
+    const {bookId} = req.params;
 
-    if(!mongoose.Types.ObjectId.isValid(projectId)){
+    if(!mongoose.Types.ObjectId.isValid(bookId)){
         // status of 2xx is successful.
         // error with 4xx is client-side.
         // error with 5xx is server-side 
@@ -50,47 +50,48 @@ router.get('/projects/:projectId', async (req,res)=>{
     }
 
     try{
-        let foundProject = await Project.findById(projectId)
-        .populate('tasks');
-        res.status(200).json(foundProject);
+        let foundBook = await Book.findById(bookId)
+/*         .populate('tasks'); */
+        res.status(200).json(foundBook);
     }
     catch(error){
         res.json(error);
     }
 });
 
-// PUT /api/projects/:projectId to update info of a Project
+// PUT /offers/:bookId to update info of a Book
+//WORKING
+router.put('/offers/:bookId', async (req, res)=>{
+    const {bookId} = req.params;
+    const {title, author, genre, description, publisher, published_date} = req.body;
 
-router.put('/projects/:projectId', async (req, res)=>{
-    const {projectId} = req.params;
-    const {title, description} = req.body;
-
-    if(!mongoose.Types.ObjectId.isValid(projectId)){
+    if(!mongoose.Types.ObjectId.isValid(bookId)){
        res.status(400).json({message: 'Specified Id is not valid'}); 
        return; 
     }
 
     try{
-        let updatedProject = await Project.findByIdAndUpdate(projectId, 
-        {title, description}, {new: true});
-        res.json(updatedProject);
+        let updatedBook = await Book.findByIdAndUpdate(bookId, 
+            {title, author, genre, description, publisher, published_date}, {new: true});
+        res.json(updatedBook);
     }
     catch(error){
         res.json(error);
     }
 });
 
-router.delete('/projects/:projectId', async(req,res)=>{
-    const {projectId} = req.params;
+//WORKING
+router.delete('/offers/:bookId', async(req,res)=>{
+    const {bookId} = req.params;
 
-    if(!mongoose.Types.ObjectId.isValid(projectId)){
+    if(!mongoose.Types.ObjectId.isValid(bookId)){
         res.status(400).json({message: 'Specified Id is not valid'}); 
         return; 
     }
 
     try{
-        await Project.findByIdAndRemove(projectId);
-        res.json({message: `Project with ${projectId} is removed.`})
+        await Book.findByIdAndRemove(bookId);
+        res.json({message: `Book with ${bookId} is removed.`})
     }
     catch(error){
         res.json(error);
