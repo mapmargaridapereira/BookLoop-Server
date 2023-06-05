@@ -12,7 +12,7 @@ const Review = require("../models/Review.model");
 const { isAuthenticated } = require("../middleware/jwt.middleware");
 
 //GET Route to render user profile
-router.get('/profile/:id', isAuthenticated, async (req, res)=>{
+router.get('/profile/:id', isAuthenticated, async (req, res, next)=>{
     const { id } = req.params;
 
     try {
