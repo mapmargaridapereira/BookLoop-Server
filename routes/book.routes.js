@@ -11,7 +11,6 @@ const Book = require("../models/Book.model");
 const { isAuthenticated } = require("../middleware/jwt.middleware");
 
 // GET /offers ROUTE that Lists the Books Up for offer
-//WORKING
 router.get('/offers', async(req,res)=>{
     try{
         let allBooks = await Book.find();
@@ -23,9 +22,12 @@ router.get('/offers', async(req,res)=>{
 });
 
 // POST /offers ROUTE that Creates a new Book up for offer
-//WORKING? Not rendering title etc?
-router.post('/offers', async (req,res)=>{
+router.post('/offers/new', isAuthenticated, async (req,res)=>{
     const {title, author, genre, description, publisher, published_date} = req.body;
+
+    if (!isAuthenticated){
+        res.redirect("/login");
+    }
 
     try{
         let response = await Book.create({title, author, genre, description, publisher, published_date});
@@ -39,7 +41,6 @@ router.post('/offers', async (req,res)=>{
 });
 
 // GET /offers/:bookId to display specific info of a Book
-//WORKING - again not rendering title etc just the object ID
 router.get('/offers/:bookId', async (req,res)=>{
     const {bookId} = req.params;
 
@@ -61,7 +62,6 @@ router.get('/offers/:bookId', async (req,res)=>{
 });
 
 // PUT /offers/:bookId to update info of a Book
-//WORKING
 router.put('/offers/:bookId', isAuthenticated, async (req, res)=>{
     const {bookId} = req.params;
     const {title, author, genre, description, publisher, published_date} = req.body;
@@ -81,7 +81,6 @@ router.put('/offers/:bookId', isAuthenticated, async (req, res)=>{
     }
 });
 
-//WORKING
 router.delete('/offers/:bookId', isAuthenticated, async(req,res)=>{
     const {bookId} = req.params;
 
