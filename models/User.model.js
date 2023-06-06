@@ -19,7 +19,7 @@ const userSchema = new Schema(
       required: [true, "Password is required."],
     },
     about: String,
-    profileImg:  { type: String, default: "https://res.cloudinary.com/dfig7ot0w/image/upload/v1686044371/default-avatar-profile-icon-vector-social-media-user-image-700-205124837_mpcw5m.jpg"},
+    profileImg:  { type: String, default: "https://cdn-icons-png.flaticon.com/512/1053/1053244.png"},
     offeredBooks: [{type: Schema.Types.ObjectId, ref: "Book"}],
     wishedBooks: [{type: Schema.Types.ObjectId, ref: "Book"}],
     messages: [{type: Schema.Types.ObjectId, ref: "Message"}],
