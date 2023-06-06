@@ -12,7 +12,7 @@ const storage = new CloudinaryStorage({
   cloudinary,
   params: {
     allowed_formats: ['jpg', 'png', 'jpeg'],
-    folder: 'Home',
+    folder: 'book_swap_cloud',
   },
 });
 
