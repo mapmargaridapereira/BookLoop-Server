@@ -27,9 +27,9 @@ router.post("/offers/new/:userId", isAuthenticated, async (req, res) => {
     title,
     author,
     genre,
+    language,
     description,
     publisher,
-    published_date,
   } = req.body;
 
   const { userId } = req.params;
@@ -44,9 +44,9 @@ router.post("/offers/new/:userId", isAuthenticated, async (req, res) => {
       title,
       author,
       genre,
+      language,
       description,
       publisher,
-      published_date,
       uploader: userId,
     });
 
@@ -84,9 +84,9 @@ router.put("/offers/:bookId", isAuthenticated, async (req, res) => {
     title,
     author,
     genre,
+    language,
     description,
     publisher,
-    published_date,
   } = req.body;
 
   if (!mongoose.Types.ObjectId.isValid(bookId)) {
@@ -97,7 +97,7 @@ router.put("/offers/:bookId", isAuthenticated, async (req, res) => {
   try {
     let updatedBook = await Book.findByIdAndUpdate(
       bookId,
-      { bookImg, title, author, genre, description, publisher, published_date },
+      { bookImg, title, author, genre, language, description, publisher },
       { new: true }
     );
     res.json(updatedBook);

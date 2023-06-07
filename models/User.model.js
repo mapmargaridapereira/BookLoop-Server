@@ -22,7 +22,6 @@ const userSchema = new Schema(
     profileImg:  { type: String, default: "https://cdn-icons-png.flaticon.com/512/1053/1053244.png"},
     offeredBooks: [{type: Schema.Types.ObjectId, ref: "Book"}],
     wishedBooks: [{type: Schema.Types.ObjectId, ref: "Book"}],
-    messages: [{type: Schema.Types.ObjectId, ref: "Message"}],
     reviews: [{type: Schema.Types.ObjectId, ref: "Review"}],
 
   },

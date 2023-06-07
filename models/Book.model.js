@@ -12,6 +12,7 @@ const bookSchema = new Schema({
     required: [true, "Author name is required."],
   },
   genre: String,
+  language: String,
   description: String,
   publisher: String,
   uploader: {

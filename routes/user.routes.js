@@ -3,7 +3,6 @@ const router = express.Router();
 
 const User = require("../models/User.model");
 const Book = require("../models/Book.model");
-const Message = require("../models/Message.model");
 const Review = require("../models/Review.model");
 
 /* const fileUploader = require("../config/cloudinary.config");
@@ -24,10 +23,6 @@ router.get('/profile/:id', isAuthenticated, async (req, res, next)=>{
           .populate({
             path: "wishedBooks",
             populate: { path: "books", model: "Book" },
-          })
-          .populate({
-            path: "messages",
-            populate: { path: "messages", model: "Message" },
           })
           .populate({
             path: "reviews",
