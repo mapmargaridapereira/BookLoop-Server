@@ -6,7 +6,7 @@ router.get("/", (req, res, next) => {
   res.json("All good in here");
 });
 
-router.post("/upload", fileUploader.single("profileImg", "bookImg"), (req, res, next) => {
+router.post("/upload", fileUploader.single("profileImg"), (req, res, next) => {
   if (!req.file) {
     next(new Error("No file uploaded"));
     return;
