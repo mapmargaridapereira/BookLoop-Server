@@ -14,7 +14,10 @@ const bookSchema = new Schema({
   genre: String,
   description: String,
   publisher: String,
-  published_date: Number,
+  uploader: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
 });
 
 // Export the Model
