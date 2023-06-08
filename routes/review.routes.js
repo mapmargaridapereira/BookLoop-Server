@@ -29,7 +29,7 @@ router.post("/review/create/:id", isAuthenticated, (req, res) => {
         $push: { reviews: newReviewId },
       });
 
-      res.redirect(`/profile/${id}`);
+      res.redirect(`/api/profile/${id}`);
     } catch (error) {
       console.log(error);
     }
