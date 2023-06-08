@@ -7,7 +7,7 @@ const User = require("../models/User.model");
 
 router.post("/review/create/:id", (req, res) => {
   const { id } = req.params;
-  const authorId = req.session.currentUser._id;
+  const authorId = req.payload._id;
 
   // req.query --> queries of the form that was submitted via 'GET' method
   // req.body --> 'body' of the form that was submitted via 'POST' method
@@ -28,7 +28,7 @@ router.post("/review/create/:id", (req, res) => {
         $push: { reviews: newReviewId },
       });
 
-      res.redirect(`/offers/${id}`);
+      res.redirect(`/profile/${id}`);
     } catch (error) {
       console.log(error);
     }
@@ -49,7 +49,7 @@ router.post("/review/delete/:id", (req, res) => {
         $pull: { reviews: removedReview._id },
       });
 
-      res.redirect("/reviews");
+      res.redirect(`/profile/${id}`);
     } catch (error) {
       console.log(error);
     }
