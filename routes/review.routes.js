@@ -1,11 +1,12 @@
 // Express method to create routes and export them to app.js
 const router = require("express").Router();
+const { isAuthenticated } = require("../middleware/jwt.middleware");
 
 // Require Review Model
 const Review = require("../models/Review.model");
 const User = require("../models/User.model");
 
-router.post("/review/create/:id", (req, res) => {
+router.post("/review/create/:id", isAuthenticated, (req, res) => {
   const { id } = req.params;
   const authorId = req.payload._id;
 
