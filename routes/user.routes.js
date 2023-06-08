@@ -16,18 +16,9 @@ router.get('/profile/:id', isAuthenticated, async (req, res, next)=>{
 
     try {
         const userProfile = await User.findById(id)
-          .populate({
-            path: "offeredBooks",
-            populate: { path: "books", model: 'Book'},
-          })
-          .populate({
-            path: "wishedBooks",
-            populate: { path: "books", model: "Book" },
-          })
-          .populate({
-            path: "reviews",
-            populate: { path: "reviews", model: "Review" },
-          });
+          .populate('offeredBooks')
+          .populate('wishedBooks')
+          .populate('reviews');
     
         res.status(200).json(userProfile);
       } catch (error) {

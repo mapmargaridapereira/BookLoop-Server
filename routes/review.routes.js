@@ -29,7 +29,7 @@ router.post("/review/create/:id", isAuthenticated, (req, res) => {
         $push: { reviews: newReviewId },
       });
 
-      res.redirect(`/api/profile/${id}`);
+      res.json('newReview')
     } catch (error) {
       console.log(error);
     }
@@ -50,7 +50,7 @@ router.post("/review/delete/:id", (req, res) => {
         $pull: { reviews: removedReview._id },
       });
 
-      res.redirect(`/profile/${id}`);
+      res.json({message: `The review was deleted successfully`});
     } catch (error) {
       console.log(error);
     }
